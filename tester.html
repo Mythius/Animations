@@ -1,0 +1,49 @@
+<html>
+<head>
+	<title></title>
+	<style>
+		img{
+			image-rendering: pixelated;
+		}
+	</style>
+	<script src="anim.js"></script>
+	<script src=helpers.js></script>
+</head>
+<body>
+	<img width=300 id=here>
+	<script>
+
+		var img = document.querySelector('#here');
+		var a;
+
+		xml('p.anims',t=>{
+			
+
+			a = new Animation(img,t);
+			a.setFrame(1);
+
+			a.play('walk-left');
+
+		});
+
+		document.on('keydown',function(e){
+			if(a && !a.isPlaying()){
+				if(e.key=='ArrowLeft'){
+					a.play('ctl').then(()=>{
+						a.play('walk-left',true).then(()=>{a.play('ltc')});
+					});
+				} else if(e.key == 'ArrowRight') {
+					a.play('ctr').then(()=>{
+						a.play('walk-right',true).then(()=>a.play('rtc'));
+					});
+				}
+			}
+		});
+
+		document.on('keyup',function(e){
+			a.stop();
+		})
+
+	</script>
+</body>
+</html>

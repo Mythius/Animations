@@ -40,7 +40,11 @@ function Animation(element,imgs,frame_count){
 			setTimeout(function(){
 				requestAnimationFrame(loop);
 			},1000/fps);
-			img.src=frames[frLists[animID][curr_frame]];
+			var t = frLists[animID][curr_frame];
+			img.src=frames[t];
+			var mainch = obj('main').children;
+			for(let m of mainch) m.style.borderColor='';
+			if(mainch[t]) mainch[t].style.borderColor='black';
 			curr_frame++;
 		}
 	}

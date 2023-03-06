@@ -15,11 +15,12 @@
 			<button id=upload><p>Upload Files</p><input multiple accept=".png" type=file></button>
 			<button id=g>Generate</button>
 			<button disabled id=p>Play</button>
-			<button id="c">Clear</button>
 			<button disabled id="s">Save</button>
+			<button id="c">Clear</button>
 			FPS: <input min=1 value=10 max=60 id=fps type="number">
 			<input id=dirname placeholder="Folder Name">
 			<button id=e>Export</button>
+			<button id=read><p>Open Animation</p><input accept=".anims" type=file></button>
 		</top>
 		<left>
 		</left>
@@ -30,130 +31,6 @@
 		<right>
 		</right>
 	</editor>
-	<script>
-		Array.prototype.last=function(){return this[this.length-1]}
-		var frame_count=10;
-		var dir = 'stickman';
-		var animation;
-		var saved = [] , imgnum;
-
-
-		function getAnim(){
-			var getname=e=>{
-				return {src:e.src,num:e.num};
-			};
-			var anim = [...obj('main').querySelectorAll('img')].map(getname);
-			return anim;
-		}
-
-		obj('#p').on('click',function(){
-			if(animation){
-				if(animation.isPlaying()){
-					this.innerHTML = 'Play';
-					animation.stop();
-				} else {
-					animation.playForward(true);
-					this.innerHTML = 'Stop';
-				}
-			}
-		});
-
-		obj('#g').on('click',function(){
-			obj('bottom').innerHTML='';
-			obj('#p').innerHTML = 'Play';
-			var a = getAnim();
-			if(a.length>0){
-				var c = create('img');
-				var AN = new Animation(c,a.map(e=>e.src),a.length);
-				obj('#p').disabled = false;
-				obj('#s').disabled = false;
-				AN.setFPS(obj('#fps').value);
-				obj('bottom').appendChild(c);
-				animation = AN;
-				imgnum = a.map(e=>e.num);
-			}
-		});
-
-		obj('#c').on('click',function(){
-			animation = null;
-			obj('bottom').innerHTML = '';
-			obj('main').innerHTML = '';
-			obj('#p').disabled = true;
-			obj('#s').disabled = true;
-		});
-
-		obj('#s').on('click',function(){
-			let l = saved.length;
-			var name = prompt('Enter Name for Animation');
-			saved.push({fps:obj('#fps').value,name,frames:imgnum});
-			var i = create('img');
-			var c = create('cont');
-			i.src = 'anim_symbol.png';
-			c.appendChild(i);
-			c.appendChild(create('p',name));
-			contextmenu(c,n=>{
-				if(n=='Delete'){
-					debugger;
-					saved.splice(l,1);
-					c.remove();
-				} else if(n=='Rename'){
-					var n = prompt('Enter new Name');
-					saved[l].name = n;
-					c.children[1].innerHTML = n;
-				}
-			},'Delete','Rename')
-			obj('right').appendChild(c);
-		});
-
-		obj('#e').on('click',function(){
-			var dirname = obj('#dirname').value;
-			if(dirname.length>0){
-				var output = {dirname,frames:saved};
-				console.log(output);
-				download('untitled.anims',JSON.stringify(output));
-			} else {
-				alert('Folder Name (where images are saved)');
-				obj('#dirname').focus();
-			}
-		});
-
-
-
-		
-		// UPLOAD IMAGES
-		obj('#upload').on('click',function(){
-			var uniq=0;
-			var uplobj = this.children[1];
-			uplobj.on('change',function(){
-				if(this.files){
-					for(let f of this.files){
-						var reader = new FileReader();
-						reader.onload = load;
-						reader.readAsDataURL(f);
-					}
-				}
-			});
-			function load(e){
-				let number = uniq++;
-				var holder = create('imghold');
-				var a = create('img');
-				a.src = e.target.result;
-				holder.appendChild(a);
-				obj('left').appendChild(holder);
-				holder.on('click',function(){
-					var img = create('img');
-					img.src = e.target.result;
-					img.num = number;
-					img.on('click',function(){
-						this.remove();
-					});
-					obj('main').appendChild(img);
-				});
-			}
-			uplobj.click();
-		})
-
-
-	</script>
+	<script src=main.js></script>
 </body>
 </html>

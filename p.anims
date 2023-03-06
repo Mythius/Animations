@@ -1,0 +1,1 @@
+{"dirname":"player","frames":[{"frames":[4,5,3,5],"name":"walk-right","fps":"10"},{"frames":[7,8,9,8],"name":"walk-left","fps":"10"},{"frames":[1,0],"name":"ctl","fps":"10"},{"frames":[1,2],"name":"ctr","fps":"10"},{"frames":[0,1],"name":"ltc","fps":"10"},{"frames":[2,1],"name":"rtc","fps":"10"}],"count":10}
